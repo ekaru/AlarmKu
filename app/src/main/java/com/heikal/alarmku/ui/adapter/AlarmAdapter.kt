@@ -13,7 +13,8 @@ import com.heikal.alarmku.utils.toDayString
 
 class AlarmAdapter(
     private val onLongClick: () -> Unit,
-    private val onSelectionChanged: (Int) -> Unit
+    private val onSelectionChanged: (Int) -> Unit,
+    private val onItemClick: (Alarm) -> Unit
 ) : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
 
     private var alarms: List<Alarm> = emptyList()
@@ -57,7 +58,7 @@ class AlarmAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_alarm, parent, false)
-        return AlarmViewHolder(view)
+        return AlarmViewHolder(view, onItemClick)
     }
 
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
@@ -66,7 +67,10 @@ class AlarmAdapter(
 
     override fun getItemCount(): Int = alarms.size
 
-    inner class AlarmViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class AlarmViewHolder(
+        itemView: View,
+        private val onItemClick: (Alarm) -> Unit
+    ) : RecyclerView.ViewHolder(itemView) {
         private val tvAlarm = itemView.findViewById<TextView>(R.id.tvAlarmItem)
         private val cbSelect = itemView.findViewById<CheckBox>(R.id.cbSelect)
 
@@ -92,6 +96,8 @@ class AlarmAdapter(
             itemView.setOnClickListener {
                 if (selectionMode) {
                     toggleSelection(alarm.id)
+                } else {
+                    onItemClick(alarm)
                 }
             }
         }

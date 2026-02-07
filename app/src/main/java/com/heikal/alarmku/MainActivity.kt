@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val recyclerView = findViewById<RecyclerView>(R.id.tvAlarms)
-        btnAddAlarm = findViewById<Button>(R.id.btnAddAlarm)
+        btnAddAlarm = findViewById(R.id.btnAddAlarm)
 
         adapter = AlarmAdapter(
             onLongClick = {
@@ -46,6 +46,11 @@ class MainActivity : AppCompatActivity() {
                 if (count == 0) {
                     actionMode?.finish()
                 }
+            },
+            onItemClick = {
+                val intent = Intent(this, AddAlarmActivity::class.java)
+                intent.putExtra("alarm_id", it.id)
+                startActivity(intent)
             }
         )
         recyclerView.layoutManager = LinearLayoutManager(this)
