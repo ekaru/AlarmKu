@@ -15,6 +15,7 @@ class AlarmViewModel(
 
     private val _alarms = MutableStateFlow<List<Alarm>>(emptyList())
     val alarms: StateFlow<List<Alarm>> = _alarms
+    private var lasDeletedAlarm: List<Alarm> = emptyList()
 
     fun loadAlarms() {
         viewModelScope.launch {
@@ -55,6 +56,24 @@ class AlarmViewModel(
         viewModelScope.launch {
             Log.d("MainActivity", "ids: ${ids}")
             repository.deleteByIds(ids)
+            loadAlarms()
+        }
+    }
+
+    fun deleteAlarmWithUndo(alarms: List<Alarm>) {
+        viewModelScope.launch {
+            lasDeletedAlarm = alarms
+            repository.deleteByIds(alarms.map { it.id }.toSet())
+            loadAlarms()
+        }
+    }
+
+    fun undoDelete() {
+        viewModelScope.launch {
+            lasDeletedAlarm.forEach {
+                repository.insertAlarm(it)
+            }
+            lasDeletedAlarm = emptyList()
             loadAlarms()
         }
     }

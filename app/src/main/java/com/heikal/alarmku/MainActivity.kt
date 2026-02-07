@@ -2,7 +2,6 @@ package com.heikal.alarmku
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
@@ -13,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.heikal.alarmku.ui.adapter.AlarmAdapter
+import com.google.android.material.snackbar.Snackbar
 import com.heikal.alarmku.ui.viewmodel.AlarmViewModel
 import com.heikal.alarmku.ui.viewmodel.AlarmViewModelFactory
 import kotlinx.coroutines.launch
@@ -88,9 +88,17 @@ class MainActivity : AppCompatActivity() {
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
             return when (item.itemId) {
                 R.id.action_delete -> {
-                    val ids = adapter.getSelectedIds()
-                    Log.d("MainActivity", "ids = ${ids}")
-                    viewModel.deleteAlarms(ids)
+                    val deletedAlarms = adapter.getSelectedAlarms()
+                    viewModel.deleteAlarmWithUndo(deletedAlarms)
+
+                    Snackbar.make(
+                        findViewById(R.id.rootLayout),
+                        "${deletedAlarms.size} alarm deleted",
+                        Snackbar.LENGTH_LONG
+                    ).setAction("UNDO") {
+                        viewModel.undoDelete()
+                    }.show()
+
                     adapter.clearSelection()
                     mode.finish()
                     true

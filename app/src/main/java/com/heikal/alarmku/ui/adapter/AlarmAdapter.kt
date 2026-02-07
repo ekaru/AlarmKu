@@ -54,6 +54,10 @@ class AlarmAdapter(
         notifyDataSetChanged()
     }
 
+    fun getSelectedAlarms(): List<Alarm> {
+        return alarms.filter() { selectedIds.contains(it.id) }
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
         val view = LayoutInflater.from(parent.context)
