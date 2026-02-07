@@ -3,7 +3,6 @@ package com.heikal.alarmku.alarm
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
 import com.heikal.alarmku.AlarmRingActivity
 import com.heikal.alarmku.data.local.AppDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +36,11 @@ class AlarmReceiver : BroadcastReceiver() {
 
             val ringIntent =
                 Intent(context, AlarmRingActivity::class.java)
-                    .apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK }
+                    .apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        putExtra("alarm_id", alarmId)
+                        putExtra("alarm_label", alarmEntity.label)
+                    }
 
             context.startActivity(ringIntent)
         }
