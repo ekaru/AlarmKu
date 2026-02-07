@@ -22,10 +22,16 @@ class AlarmRingActivity : AppCompatActivity() {
         btnSnooze.setOnClickListener {
             AlarmPlayer.stop()
 
-            AlarmScheduler.scheduleSnooze(
-                context = this,
-                minutes = 5
-            )
+            val alarmId = intent.getLongExtra("alarm_id", -1L)
+
+            if (alarmId != -1L) {
+                AlarmScheduler.scheduleSnooze(
+                    context = this,
+                    alarmId = alarmId,
+                    minutes = 5
+                )
+            }
+
             finish()
         }
 

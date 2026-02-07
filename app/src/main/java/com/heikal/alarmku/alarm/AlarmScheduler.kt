@@ -9,8 +9,6 @@ import java.util.Calendar
 
 object AlarmScheduler {
 
-    private const val SNOOZE_REQUEST_CODE = 999999
-
     fun schedule(
         context: Context,
         alarmId: Long,
@@ -54,16 +52,21 @@ object AlarmScheduler {
 
     fun scheduleSnooze(
         context: Context,
+        alarmId: Long,
         minutes: Int
     ) {
         val alarmManager =
             context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val intent = Intent(context, AlarmReceiver::class.java)
+        val intent =
+            Intent(context, AlarmReceiver::class.java).apply {
+                putExtra("alarm_id", alarmId)
+                putExtra("is_snooze", true)
+            }
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            SNOOZE_REQUEST_CODE,
+            (alarmId + 100000).toInt(),
             intent,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
