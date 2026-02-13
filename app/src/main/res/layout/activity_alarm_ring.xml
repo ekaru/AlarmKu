@@ -17,14 +17,15 @@
     <Button
         android:id="@+id/btnStop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#808080"
-        android:text="STOP"/>
+        android:layout_height="56dp"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:text="STOP"
+        android:textSize="18sp"/>
 
     <Button
         android:id="@+id/btnSnooze"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:backgroundTint="#808080"
         android:text="SNOOZE (5 min)"
         android:layout_marginTop="16dp"/>

@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,9 +16,17 @@
         android:theme="@style/Theme.AlarmKu">
         <activity
             android:name=".AlarmRingActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""/>
         <activity
             android:name=".AddAlarmActivity"
+            android:exported="false"/>
+        <receiver
+            android:name=".alarm.AlarmActionReceiver"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
