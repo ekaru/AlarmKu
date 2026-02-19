@@ -5,16 +5,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.heikal.alarmku.R
 import com.heikal.alarmku.domain.model.Alarm
+import com.heikal.alarmku.utils.TimeUtils
 import com.heikal.alarmku.utils.toDayString
 
 
 class AlarmAdapter(
     private val onLongClick: () -> Unit,
     private val onSelectionChanged: (Int) -> Unit,
-    private val onItemClick: (Alarm) -> Unit
+    private val onItemClick: (Alarm) -> Unit,
+    private val onToggleEnable: (Alarm, Boolean) -> Unit
 ) : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
 
     private var alarms: List<Alarm> = emptyList()
@@ -37,7 +40,6 @@ class AlarmAdapter(
         notifyDataSetChanged()
     }
 
-    fun getSelectedIds(): Set<Long> = selectedIds
 
     fun clearSelection() {
         selectionMode = false
@@ -62,7 +64,7 @@ class AlarmAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_alarm, parent, false)
-        return AlarmViewHolder(view, onItemClick)
+        return AlarmViewHolder(view, onItemClick, onToggleEnable)
     }
 
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
@@ -73,20 +75,33 @@ class AlarmAdapter(
 
     inner class AlarmViewHolder(
         itemView: View,
-        private val onItemClick: (Alarm) -> Unit
+        private val onItemClick: (Alarm) -> Unit,
+        private val onToggleEnable: (Alarm, Boolean) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
         private val tvAlarm = itemView.findViewById<TextView>(R.id.tvAlarmItem)
         private val cbSelect = itemView.findViewById<CheckBox>(R.id.cbSelect)
+        private val switchEnable = itemView.findViewById<SwitchCompat>(R.id.switchEnable)
 
         fun bind(alarm: Alarm) {
             val time = String.format("%02d:%02d", alarm.hour, alarm.minute)
             val days = alarm.repeatDays.toDayString()
             val label = if (alarm.label.isEmpty()) "" else "| ${alarm.label}"
+            val countdown = TimeUtils.getTimeUntil(alarm)
 
-            tvAlarm.text = "⏰ $time $label \n ($days)"
+            val textDetail =
+                if (alarm.isEnabled)
+                    "$days | $countdown"
+                else
+                    "Disabled"
+
+            tvAlarm.text = "⏰ $time $label \n $textDetail"
+
 
             cbSelect.visibility = if (selectionMode) View.VISIBLE else View.GONE
             cbSelect.isChecked = selectedIds.contains(alarm.id)
+
+            switchEnable.setOnCheckedChangeListener(null)
+            switchEnable.isChecked = alarm.isEnabled
 
             itemView.setOnLongClickListener {
                 if (!selectionMode) {
@@ -103,6 +118,10 @@ class AlarmAdapter(
                 } else {
                     onItemClick(alarm)
                 }
+            }
+
+            switchEnable.setOnCheckedChangeListener { _, isChecked ->
+                onToggleEnable(alarm, isChecked)
             }
         }
     }

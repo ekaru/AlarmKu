@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.heikal.alarmku.data.local.entity.AlarmEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AlarmDao {
@@ -17,7 +18,7 @@ interface AlarmDao {
     suspend fun updateAlarm(alarm: AlarmEntity)
 
     @Query("SELECT * FROM alarms")
-    suspend fun getAllAlarms(): List<AlarmEntity>
+    fun getAllAlarms(): Flow<List<AlarmEntity>>
 
     @Query("SELECT * FROM alarms WHERE id = :id")
     suspend fun getAlarmById(id: Long): AlarmEntity?

@@ -5,27 +5,24 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.heikal.alarmku.domain.model.Alarm
 import java.util.Calendar
 
 object AlarmScheduler {
 
-    fun schedule(
-        context: Context,
-        alarmId: Long,
-        hour: Int,
-        minute: Int
-    ) {
+    fun schedule(context: Context, alarm: Alarm) {
+
         val alarmManager =
             context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val intent =
             Intent(context, AlarmReceiver::class.java).apply {
-                putExtra("alarm_id", alarmId)
+                putExtra("alarm_id", alarm.id)
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            alarmId.toInt(),
+            alarm.id.toInt(),
             intent,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
@@ -34,8 +31,8 @@ object AlarmScheduler {
         )
 
         val calendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, hour)
-            set(Calendar.MINUTE, minute)
+            set(Calendar.HOUR_OF_DAY, alarm.hour)
+            set(Calendar.MINUTE, alarm.minute)
             set(Calendar.SECOND, 0)
 
             if (before(Calendar.getInstance())) {

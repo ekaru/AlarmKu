@@ -6,23 +6,22 @@ import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.heikal.alarmku.ui.adapter.AlarmAdapter
 import com.google.android.material.snackbar.Snackbar
+import com.heikal.alarmku.data.local.AppDatabase
+import com.heikal.alarmku.data.repository.AlarmRepository
 import com.heikal.alarmku.ui.viewmodel.AlarmViewModel
 import com.heikal.alarmku.ui.viewmodel.AlarmViewModelFactory
 import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
-    private val viewModel: AlarmViewModel by viewModels {
-        AlarmViewModelFactory(this)
-    }
-
+    private lateinit var viewModel: AlarmViewModel
     private lateinit var adapter: AlarmAdapter
     private lateinit var btnAddAlarm: Button
     private var actionMode: ActionMode? = null
@@ -30,6 +29,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val database = AppDatabase.getInstance(application)
+        val repository = AlarmRepository(database.alarmDao())
+
+        val factory = AlarmViewModelFactory(
+            application,
+            repository
+        )
+
+        viewModel = ViewModelProvider(this, factory)[AlarmViewModel::class.java]
 
         val recyclerView = findViewById<RecyclerView>(R.id.tvAlarms)
         btnAddAlarm = findViewById(R.id.btnAddAlarm)
@@ -51,6 +60,10 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, AddAlarmActivity::class.java)
                 intent.putExtra("alarm_id", it.id)
                 startActivity(intent)
+            },
+            onToggleEnable = { alarm, isEnabled ->
+                viewModel.toggleAlarm(alarm, isEnabled)
+
             }
         )
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -69,11 +82,6 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadAlarms()
     }
 
     private val actionModeCallback = object : ActionMode.Callback {

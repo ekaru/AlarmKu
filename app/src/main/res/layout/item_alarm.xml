@@ -14,7 +14,12 @@
     <TextView
         android:id="@+id/tvAlarmItem"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_weight="1"
         android:textSize="16sp"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchEnable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

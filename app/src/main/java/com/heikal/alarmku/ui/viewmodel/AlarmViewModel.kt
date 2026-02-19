@@ -1,8 +1,9 @@
 package com.heikal.alarmku.ui.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.heikal.alarmku.alarm.AlarmScheduler
 import com.heikal.alarmku.data.repository.AlarmRepository
 import com.heikal.alarmku.domain.model.Alarm
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,28 +11,25 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class AlarmViewModel(
+    application: Application,
     private val repository: AlarmRepository
-): ViewModel() {
+): AndroidViewModel(application) {
 
     private val _alarms = MutableStateFlow<List<Alarm>>(emptyList())
     val alarms: StateFlow<List<Alarm>> = _alarms
     private var lasDeletedAlarm: List<Alarm> = emptyList()
+    private val appContext = getApplication<Application>()
 
-    fun loadAlarms() {
+    init {
         viewModelScope.launch {
-            _alarms.value = repository.getAllAlarms()
+            repository.getAllAlarms().collect { list ->
+                _alarms.value = list
+            }
         }
     }
 
     suspend fun getAlarmById(id: Long): Alarm? {
         return repository.getAlarmById(id)
-    }
-
-    fun addAlarm(alarm: Alarm) {
-        viewModelScope.launch {
-            repository.insertAlarm(alarm)
-            loadAlarms()
-        }
     }
 
     suspend fun addAlarmAndReturnId(alarm: Alarm): Long {
@@ -41,22 +39,6 @@ class AlarmViewModel(
     fun updateAlarm(alarm: Alarm) {
         viewModelScope.launch {
             repository.updateAlarm(alarm)
-            loadAlarms()
-        }
-    }
-
-    fun deleteAlarm(id: Long) {
-        viewModelScope.launch {
-            repository.deleteAlarm(id)
-            loadAlarms()
-        }
-    }
-
-    fun deleteAlarms(ids: Set<Long>) {
-        viewModelScope.launch {
-            Log.d("MainActivity", "ids: ${ids}")
-            repository.deleteByIds(ids)
-            loadAlarms()
         }
     }
 
@@ -64,7 +46,6 @@ class AlarmViewModel(
         viewModelScope.launch {
             lasDeletedAlarm = alarms
             repository.deleteByIds(alarms.map { it.id }.toSet())
-            loadAlarms()
         }
     }
 
@@ -74,7 +55,19 @@ class AlarmViewModel(
                 repository.insertAlarm(it)
             }
             lasDeletedAlarm = emptyList()
-            loadAlarms()
+        }
+    }
+
+    fun toggleAlarm(alarm: Alarm, enabled: Boolean) {
+        viewModelScope.launch {
+            val updated = alarm.copy(isEnabled = enabled)
+            repository.updateAlarm(updated)
+
+            if (enabled) {
+                AlarmScheduler.schedule(appContext, updated)
+            } else {
+                AlarmScheduler.cancel(appContext, updated.id)
+            }
         }
     }
 }

@@ -6,10 +6,12 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TimePicker
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
 import com.heikal.alarmku.alarm.AlarmScheduler
+import com.heikal.alarmku.data.local.AppDatabase
+import com.heikal.alarmku.data.repository.AlarmRepository
 import com.heikal.alarmku.domain.model.Alarm
 import com.heikal.alarmku.ui.viewmodel.AlarmViewModel
 import com.heikal.alarmku.ui.viewmodel.AlarmViewModelFactory
@@ -18,14 +20,21 @@ import com.heikal.alarmku.utils.getMinuteCompat
 import kotlinx.coroutines.launch
 
 class AddAlarmActivity : AppCompatActivity() {
-
-    private val viewModel: AlarmViewModel by viewModels {
-        AlarmViewModelFactory(this)
-    }
+    private lateinit var viewModel: AlarmViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_alarm)
+
+        val database = AppDatabase.getInstance(application)
+        val repository = AlarmRepository(database.alarmDao())
+
+        val factory = AlarmViewModelFactory(
+            application,
+            repository
+        )
+
+        viewModel = ViewModelProvider(this, factory)[AlarmViewModel::class.java]
 
         val timePicker = findViewById<TimePicker>(R.id.timePicker)
         val etLabel = findViewById<EditText>(R.id.etLabel)
@@ -110,11 +119,12 @@ class AddAlarmActivity : AppCompatActivity() {
                     AlarmScheduler.cancel(this@AddAlarmActivity, alarmId)
                 }
 
+                val finalAlarm =
+                    alarm.copy(id = if (alarmId == -1L) finalAlarmId else alarmId)
+
                 AlarmScheduler.schedule(
                     context = this@AddAlarmActivity,
-                    alarmId = if (alarmId == -1L) finalAlarmId else alarmId,
-                    hour = hour,
-                    minute = minute
+                    finalAlarm
                 )
                 finish()
             }
