@@ -1,11 +1,12 @@
 package com.heikal.alarmku
 
-import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.TimePicker
+import android.widget.TextView
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.ViewModelProvider
@@ -15,12 +16,20 @@ import com.heikal.alarmku.data.repository.AlarmRepository
 import com.heikal.alarmku.domain.model.Alarm
 import com.heikal.alarmku.ui.viewmodel.AlarmViewModel
 import com.heikal.alarmku.ui.viewmodel.AlarmViewModelFactory
-import com.heikal.alarmku.utils.getHourCompat
-import com.heikal.alarmku.utils.getMinuteCompat
 import kotlinx.coroutines.launch
 
 class AddAlarmActivity : AppCompatActivity() {
     private lateinit var viewModel: AlarmViewModel
+    private lateinit var timePicker: TextView
+    private var selectedHour = 7
+    private var selectedMinute = 0
+
+    private fun updateDisplayedTime() {
+        val formattedTime =
+            String.format("%02d:%02d", selectedHour, selectedMinute)
+
+        timePicker.text = formattedTime
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +45,7 @@ class AddAlarmActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this, factory)[AlarmViewModel::class.java]
 
-        val timePicker = findViewById<TimePicker>(R.id.timePicker)
+        timePicker = findViewById(R.id.timePicker)
         val etLabel = findViewById<EditText>(R.id.etLabel)
         val btnSave = findViewById<Button>(R.id.btnSave)
         val btnCancel = findViewById<Button>(R.id.btnCancel)
@@ -55,26 +64,43 @@ class AddAlarmActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 val alarm = viewModel.getAlarmById(alarmId)
                 alarm?.let {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        timePicker.hour = it.hour
-                        timePicker.minute = it.minute
-                    } else {
-                        timePicker.currentHour = it.hour
-                        timePicker.currentMinute = it.minute
-                    }
-                    cbMon.isChecked = it.repeatDays.contains(1)
-                    cbTue.isChecked = it.repeatDays.contains(2)
-                    cbWed.isChecked = it.repeatDays.contains(3)
-                    cbThu.isChecked = it.repeatDays.contains(4)
-                    cbFri.isChecked = it.repeatDays.contains(5)
-                    cbSat.isChecked = it.repeatDays.contains(6)
-                    cbSun.isChecked = it.repeatDays.contains(7)
+                    selectedHour = it.hour
+                    selectedMinute = it.minute
+
+                    updateDisplayedTime()
+
+                    cbMon.isChecked = it.repeatDays.contains(2)
+                    cbTue.isChecked = it.repeatDays.contains(3)
+                    cbWed.isChecked = it.repeatDays.contains(4)
+                    cbThu.isChecked = it.repeatDays.contains(5)
+                    cbFri.isChecked = it.repeatDays.contains(6)
+                    cbSat.isChecked = it.repeatDays.contains(7)
+                    cbSun.isChecked = it.repeatDays.contains(1)
                     etLabel.setText(it.label)
                 }
             }
         }
 
-        timePicker.setIs24HourView(true)
+        timePicker.setOnClickListener {
+
+            val picker =
+                MaterialTimePicker.Builder()
+                    .setHour(selectedHour)
+                    .setMinute(selectedMinute)
+                    .setTimeFormat(TimeFormat.CLOCK_24H)
+                    .setTitleText("Select Alarm Time")
+                    .build()
+
+            picker.show(supportFragmentManager, "alarm_time")
+
+            picker.addOnPositiveButtonClickListener {
+
+                selectedHour = picker.hour
+                selectedMinute = picker.minute
+
+                updateDisplayedTime()
+            }
+        }
 
         btnCancel.setOnClickListener {
             finish()
@@ -82,19 +108,19 @@ class AddAlarmActivity : AppCompatActivity() {
 
         btnSave.setOnClickListener {
             lifecycleScope.launch {
-                val hour = timePicker.getHourCompat()
-                val minute = timePicker.getMinuteCompat()
+                val hour = selectedHour
+                val minute = selectedMinute
 
                 val label = etLabel.text.toString()
 
                 val repeatDays = mutableSetOf<Int>()
-                if (cbMon.isChecked) repeatDays.add(1)
-                if (cbTue.isChecked) repeatDays.add(2)
-                if (cbWed.isChecked) repeatDays.add(3)
-                if (cbThu.isChecked) repeatDays.add(4)
-                if (cbFri.isChecked) repeatDays.add(5)
-                if (cbSat.isChecked) repeatDays.add(6)
-                if (cbSun.isChecked) repeatDays.add(7)
+                if (cbMon.isChecked) repeatDays.add(2)
+                if (cbTue.isChecked) repeatDays.add(3)
+                if (cbWed.isChecked) repeatDays.add(4)
+                if (cbThu.isChecked) repeatDays.add(5)
+                if (cbFri.isChecked) repeatDays.add(6)
+                if (cbSat.isChecked) repeatDays.add(7)
+                if (cbSun.isChecked) repeatDays.add(1)
 
 
                 val alarm = Alarm(
@@ -130,7 +156,5 @@ class AddAlarmActivity : AppCompatActivity() {
             }
 
         }
-
-
     }
 }
