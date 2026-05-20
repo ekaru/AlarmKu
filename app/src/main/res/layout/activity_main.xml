@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp">
+    android:background="@color/bg_dark"
+    android:paddingVertical="16dp"
+    >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tvAlarms"
@@ -13,11 +16,13 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnAddAlarm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:enabled="true"
-        android:text="+ Tambah Alarm" />
+        android:layout_margin="10dp"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/neon_purple"
+        android:tint="@android:color/black"/>
 
 </LinearLayout>

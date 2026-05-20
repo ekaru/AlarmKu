@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/bg_dark"
     android:padding="16dp">
 
-    <TimePicker
+    <TextView
         android:id="@+id/timePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:timePickerMode="spinner" />
+        android:layout_gravity="center_horizontal"
+        android:text="07:00"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary"
+        android:paddingTop="32dp"
+        android:paddingBottom="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Tap to change time"
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,43 +37,50 @@
             android:id="@+id/cbMon"
             android:text="Monday"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"/>
 
         <CheckBox
             android:id="@+id/cbTue"
             android:text="Tuesday"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"/>
 
         <CheckBox
             android:id="@+id/cbWed"
             android:text="Wednesday"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"/>
 
         <CheckBox
             android:id="@+id/cbThu"
             android:text="Thursday"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"/>
 
         <CheckBox
             android:id="@+id/cbFri"
             android:text="Friday"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"/>
 
         <CheckBox
             android:id="@+id/cbSat"
             android:text="Saturday"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"/>
 
         <CheckBox
             android:id="@+id/cbSun"
             android:text="Sunday"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"/>
     </LinearLayout>
 
     <EditText
@@ -65,22 +88,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Alarm label"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSave"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#04AA6D"
+        android:layout_height="56dp"
+        android:layout_marginTop="34dp"
         android:text="Save Alarm"
-        android:layout_marginTop="24dp"/>
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:elevation="4dp"
+        app:backgroundTint="@color/neon_purple"
+        app:cornerRadius="28dp"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCancel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#f44336"
+        android:layout_height="56dp"
+        android:layout_marginTop="12dp"
         android:text="Cancel"
-        android:layout_marginTop="10dp"/>
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/neon_purple"
+        android:backgroundTint="@android:color/transparent"
+        app:strokeColor="@color/neon_purple"
+        app:strokeWidth="2dp"
+        app:cornerRadius="28dp"/>
 
 </LinearLayout>

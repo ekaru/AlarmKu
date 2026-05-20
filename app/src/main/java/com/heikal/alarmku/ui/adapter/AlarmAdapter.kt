@@ -1,11 +1,13 @@
 package com.heikal.alarmku.ui.adapter
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.heikal.alarmku.R
 import com.heikal.alarmku.domain.model.Alarm
@@ -79,22 +81,26 @@ class AlarmAdapter(
         private val onToggleEnable: (Alarm, Boolean) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
         private val tvAlarm = itemView.findViewById<TextView>(R.id.tvAlarmItem)
+        private val tvLabel = itemView.findViewById<TextView>(R.id.tvLabel)
+        private val tvSubtitle = itemView.findViewById<TextView>(R.id.tvSubtitle)
         private val cbSelect = itemView.findViewById<CheckBox>(R.id.cbSelect)
         private val switchEnable = itemView.findViewById<SwitchCompat>(R.id.switchEnable)
 
         fun bind(alarm: Alarm) {
             val time = String.format("%02d:%02d", alarm.hour, alarm.minute)
             val days = alarm.repeatDays.toDayString()
-            val label = if (alarm.label.isEmpty()) "" else "| ${alarm.label}"
+            val label = if (alarm.label.isEmpty()) "" else " ${alarm.label}"
             val countdown = TimeUtils.getTimeUntil(alarm)
 
             val textDetail =
                 if (alarm.isEnabled)
                     "$days | $countdown"
                 else
-                    "Disabled"
+                    days
 
-            tvAlarm.text = "⏰ $time $label \n $textDetail"
+            tvAlarm.text = time
+            tvLabel.text = label
+            tvSubtitle.text = textDetail
 
 
             cbSelect.visibility = if (selectionMode) View.VISIBLE else View.GONE
@@ -120,9 +126,28 @@ class AlarmAdapter(
                 }
             }
 
+            itemView.alpha =
+                if (alarm.isEnabled) 1f else 0.5f
+
             switchEnable.setOnCheckedChangeListener { _, isChecked ->
                 onToggleEnable(alarm, isChecked)
             }
+
+            switchEnable.thumbTintList =
+                ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.neon_purple
+                    )
+                )
+
+            switchEnable.thumbTintList =
+                ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.switch_off
+                    )
+                )
         }
     }
 

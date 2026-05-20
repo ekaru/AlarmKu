@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.heikal.alarmku.ui.adapter.AlarmAdapter
 import com.google.android.material.snackbar.Snackbar
 import com.heikal.alarmku.data.local.AppDatabase
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: AlarmViewModel
     private lateinit var adapter: AlarmAdapter
-    private lateinit var btnAddAlarm: Button
+    private lateinit var btnAddAlarm: FloatingActionButton
     private var actionMode: ActionMode? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
