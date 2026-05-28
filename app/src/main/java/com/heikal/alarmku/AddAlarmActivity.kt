@@ -1,5 +1,6 @@
 package com.heikal.alarmku
 
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
@@ -21,8 +22,8 @@ import kotlinx.coroutines.launch
 class AddAlarmActivity : AppCompatActivity() {
     private lateinit var viewModel: AlarmViewModel
     private lateinit var timePicker: TextView
-    private var selectedHour = 7
-    private var selectedMinute = 0
+    private var selectedHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+    private var selectedMinute = Calendar.getInstance().get(Calendar.MINUTE)
 
     private fun updateDisplayedTime() {
         val formattedTime =
@@ -80,6 +81,8 @@ class AddAlarmActivity : AppCompatActivity() {
                 }
             }
         }
+
+        updateDisplayedTime()
 
         timePicker.setOnClickListener {
 

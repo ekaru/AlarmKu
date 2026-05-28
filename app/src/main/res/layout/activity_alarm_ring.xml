@@ -1,32 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:background="@color/bg_dark">
+
+    <TextView
+        android:id="@+id/tvRingTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:text="07:00"
+        android:textSize="72sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary"/>
 
     <TextView
         android:id="@+id/tvAlarmLabel"
-        android:text="⏰ ALARM"
+        android:text="ALARM"
         android:textSize="28sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="22sp"
+        android:textColor="@color/text_secondary"/>
 
-    <Button
-        android:id="@+id/btnStop"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:backgroundTint="@android:color/holo_red_dark"
-        android:text="STOP"
-        android:textSize="18sp"/>
-
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSnooze"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:backgroundTint="#808080"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center_horizontal"
         android:text="SNOOZE (5 min)"
-        android:layout_marginTop="16dp"/>
+        android:textSize="20sp"
+        android:textColor="@color/neon_purple"
+        android:backgroundTint="@android:color/transparent"
+        android:layout_marginTop="26dp"
+        app:strokeColor="@color/neon_purple"
+        app:strokeWidth="2dp"
+        app:cornerRadius="125dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="30dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStop"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="STOP"
+            android:layout_gravity="bottom"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/neon_purple"
+            app:cornerRadius="28dp" />
+
+
+    </LinearLayout>
+
+
+
+
 </LinearLayout>

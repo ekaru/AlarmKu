@@ -16,11 +16,7 @@ object TimeUtils {
             set(Calendar.MILLISECOND, 0)
         }
 
-        println("now = ${now.time}")
-
         val target = getNextTriggerTime(alarm, now)
-
-        println("target = ${target.time}")
 
         val diff = target.timeInMillis - now.timeInMillis
 
@@ -29,8 +25,6 @@ object TimeUtils {
         val hours = (diff / (1000 * 60 * 60)) % 24
 
         val minutes = (diff / (1000 * 60)) % 60
-
-        println("days = $days, hours = $hours, minutes = $minutes, millis = $diff")
 
         return formatCountdown(days, hours, minutes)
     }
@@ -64,9 +58,6 @@ object TimeUtils {
                 set(Calendar.SECOND, 0)
                 set(Calendar.MILLISECOND, 0)
             }
-
-            println("$i = ${check.time}")
-            println("repeatDays = $repeatDays")
 
             val dayOfWeek = check.get(Calendar.DAY_OF_WEEK)
 

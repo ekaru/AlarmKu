@@ -36,7 +36,9 @@ class AlarmReceiver : BroadcastReceiver() {
             AlarmNotification.show(
                 context = context,
                 alarmId = alarmId,
-                label = alarmEntity.label
+                label = alarmEntity.label,
+                hour = alarmEntity.hour,
+                minute = alarmEntity.minute
             )
         }
     }

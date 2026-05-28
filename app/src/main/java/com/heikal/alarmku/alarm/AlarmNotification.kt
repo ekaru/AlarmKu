@@ -16,7 +16,7 @@ object AlarmNotification {
     private const val CHANNEL_NAME = "Alarm"
 
     @SuppressLint("FullScreenIntentPolicy")
-    fun show(context: Context, alarmId: Long, label: String?) {
+    fun show(context: Context, alarmId: Long, label: String?, hour: Int, minute: Int) {
 
         createChannel(context)
 
@@ -47,6 +47,8 @@ object AlarmNotification {
         val ringIntent = Intent(context, AlarmRingActivity::class.java).apply {
             putExtra("alarm_id", alarmId)
             putExtra("alarm_label", label)
+            putExtra("alarm_hour", hour)
+            putExtra("alarm_minute", minute)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
 

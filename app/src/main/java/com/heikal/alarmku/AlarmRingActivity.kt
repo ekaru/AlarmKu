@@ -1,7 +1,6 @@
 package com.heikal.alarmku
 
 import android.app.NotificationManager
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
@@ -31,15 +30,20 @@ class AlarmRingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_alarm_ring)
 
         val alarmId = intent.getLongExtra("alarm_id", -1L)
+        val ringTime = findViewById<TextView>(R.id.tvRingTime)
+        val hour = intent.getIntExtra("alarm_hour", -1)
+        val minute = intent.getIntExtra("alarm_minute", -1)
+        ringTime.text = "$hour:$minute"
+
         val tvLabel = findViewById<TextView>(R.id.tvAlarmLabel)
         val label = intent.getStringExtra("alarm_label")
-        tvLabel.text = if (label.isNullOrEmpty()) "⏰ ALARM"
-            else "⏰ ${label.uppercase()}"
+        tvLabel.text = if (label.isNullOrEmpty()) "ALARM"
+            else label.uppercase()
 
         val btnStop = findViewById<Button>(R.id.btnStop)
         val btnSnooze = findViewById<Button>(R.id.btnSnooze)
         val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         btnStop.setOnClickListener {
             AlarmPlayer.stop()
