@@ -32,6 +32,10 @@ class AlarmRepository(
         alarmDao.updateAlarm(alarm.toEntity())
     }
 
+    suspend fun deleteAlarm(id: Long) {
+        alarmDao.deleteAlarm(id)
+    }
+
     suspend fun deleteByIds(ids: Set<Long>) {
         alarmDao.deleteByIds(ids.toList())
     }
@@ -45,7 +49,8 @@ private fun AlarmEntity.toDomain(): Alarm {
         label = label,
         repeatDays = repeatDays.split(",").filter { it.isNotBlank() }.map { it.toInt() }.toSet(),
         soundIds = soundIds.split(",").filter { it.isNotBlank() }.map { it.toInt() },
-        isEnabled = isEnabled
+        isEnabled = isEnabled,
+        deleteOnce = deleteOnce
     )
 }
 
@@ -57,6 +62,7 @@ private fun Alarm.toEntity(): AlarmEntity {
         label = label,
         repeatDays = repeatDays.joinToString(","),
         soundIds = soundIds.joinToString(","),
-        isEnabled = isEnabled
+        isEnabled = isEnabled,
+        deleteOnce = deleteOnce
     )
 }

@@ -8,8 +8,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.heikal.alarmku.alarm.AlarmController
 import com.heikal.alarmku.alarm.AlarmPlayer
-import com.heikal.alarmku.alarm.AlarmScheduler
 
 class AlarmRingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +33,9 @@ class AlarmRingActivity : AppCompatActivity() {
         val ringTime = findViewById<TextView>(R.id.tvRingTime)
         val hour = intent.getIntExtra("alarm_hour", -1)
         val minute = intent.getIntExtra("alarm_minute", -1)
-        ringTime.text = "$hour:$minute"
+        val deleteOnce = intent.getBooleanExtra("alarm_deleteOnce", false)
+        val ringTimeText = "$hour:$minute"
+        ringTime.text = ringTimeText
 
         val tvLabel = findViewById<TextView>(R.id.tvAlarmLabel)
         val label = intent.getStringExtra("alarm_label")
@@ -46,23 +48,14 @@ class AlarmRingActivity : AppCompatActivity() {
             getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         btnStop.setOnClickListener {
-            AlarmPlayer.stop()
+            AlarmController.stopAlarm(this, alarmId, deleteOnce)
             notificationManager.cancel(alarmId.toInt())
             finish()
         }
 
         btnSnooze.setOnClickListener {
-            AlarmPlayer.stop()
+            AlarmController.snoozeAlarm(this, alarmId)
             notificationManager.cancel(alarmId.toInt())
-
-            if (alarmId != -1L) {
-                AlarmScheduler.scheduleSnooze(
-                    context = this,
-                    alarmId = alarmId,
-                    minutes = 5
-                )
-            }
-
             finish()
         }
 

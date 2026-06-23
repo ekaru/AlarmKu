@@ -16,13 +16,16 @@ object AlarmNotification {
     private const val CHANNEL_NAME = "Alarm"
 
     @SuppressLint("FullScreenIntentPolicy")
-    fun show(context: Context, alarmId: Long, label: String?, hour: Int, minute: Int) {
+    fun show(
+        context: Context, alarmId: Long, label: String?,
+        hour: Int, minute: Int, deleteOnce: Boolean) {
 
         createChannel(context)
 
         val stopIntent = Intent(context, AlarmActionReceiver::class.java).apply {
             action = "ACTION_STOP_ALARM"
             putExtra("alarm_id", alarmId)
+            putExtra("alarm_deleteOnce", deleteOnce)
         }
 
         val stopPendingIntent = PendingIntent.getBroadcast(
@@ -49,6 +52,7 @@ object AlarmNotification {
             putExtra("alarm_label", label)
             putExtra("alarm_hour", hour)
             putExtra("alarm_minute", minute)
+            putExtra("alarm_deleteOnce", deleteOnce)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
 

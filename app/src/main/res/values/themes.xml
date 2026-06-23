@@ -16,6 +16,20 @@
 
     </style>
 
+    <style name="BottomSheetTheme"
+        parent="ThemeOverlay.Material3.BottomSheetDialog">
+
+        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+
+    </style>
+
+    <style name="CustomBottomSheet"
+        parent="Widget.Material3.BottomSheet.Modal">
+
+        <item name="android:background">@color/card_dark</item>
+
+    </style>
+
     <style name="Theme.AlarmKu"
         parent="Base.Theme.AlarmKu" />
 

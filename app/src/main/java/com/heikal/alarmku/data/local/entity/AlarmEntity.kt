@@ -8,12 +8,11 @@ import androidx.room.PrimaryKey
 data class AlarmEntity (
     @PrimaryKey(true)
     val id: Long = 0L,
-
     val hour: Int,
     val minute: Int,
     val label: String,
     val repeatDays: String,
     val soundIds: String,
-
-    val isEnabled: Boolean
+    val isEnabled: Boolean,
+    val deleteOnce: Boolean
 )

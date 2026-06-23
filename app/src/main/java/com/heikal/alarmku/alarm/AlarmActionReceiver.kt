@@ -10,24 +10,17 @@ class AlarmActionReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
 
         val alarmId = intent.getLongExtra("alarm_id", -1L)
+        val deleteOnce = intent.getBooleanExtra("alarm_deleteOnce", false)
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         when (intent.action) {
             "ACTION_STOP_ALARM" -> {
-                AlarmPlayer.stop()
+                AlarmController.stopAlarm(context, alarmId, deleteOnce)
                 notificationManager.cancelAll()
             }
             "ACTION_SNOOZE_ALARM" -> {
-
-                if (alarmId != -1L) {
-                    AlarmScheduler.scheduleSnooze(
-                        context,
-                        alarmId,
-                        5
-                    )
-                }
-                AlarmPlayer.stop()
+                AlarmController.snoozeAlarm(context, alarmId)
                 notificationManager.cancelAll()
             }
         }

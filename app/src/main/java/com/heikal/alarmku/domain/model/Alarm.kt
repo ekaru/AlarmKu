@@ -7,5 +7,6 @@ data class Alarm(
     val label: String,
     val repeatDays: Set<Int>,
     val soundIds: List<Int>,
-    val isEnabled: Boolean = true
+    val isEnabled: Boolean = true,
+    val deleteOnce: Boolean = false
 )

@@ -38,7 +38,8 @@ class AlarmReceiver : BroadcastReceiver() {
                 alarmId = alarmId,
                 label = alarmEntity.label,
                 hour = alarmEntity.hour,
-                minute = alarmEntity.minute
+                minute = alarmEntity.minute,
+                deleteOnce = alarmEntity.deleteOnce
             )
         }
     }

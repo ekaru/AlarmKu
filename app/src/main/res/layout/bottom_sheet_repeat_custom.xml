@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <CheckBox
+        android:id="@+id/cbMon"
+        android:text="Monday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/cbTue"
+        android:text="Tuesday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/cbWed"
+        android:text="Wednesday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/cbThu"
+        android:text="Thursday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/cbFri"
+        android:text="Friday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/cbSat"
+        android:text="Saturday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/cbSun"
+        android:text="Sunday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelRepeatCustom"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textColor="@color/neon_purple"
+            android:backgroundTint="@android:color/transparent"
+            app:strokeColor="@color/neon_purple"
+            app:strokeWidth="2dp"
+            app:cornerRadius="28dp"/>
+
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="0dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSaveRepeatCustom"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:text="Save"
+            app:cornerRadius="28dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>
