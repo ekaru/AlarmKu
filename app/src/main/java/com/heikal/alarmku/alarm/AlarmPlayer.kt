@@ -5,11 +5,11 @@ import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import androidx.core.net.toUri
 
 object AlarmPlayer {
     var mediaPlayer: MediaPlayer? = null
@@ -17,7 +17,7 @@ object AlarmPlayer {
     private var audioManager: AudioManager? = null
     private var audioFocusRequest: AudioFocusRequest? = null
 
-    fun play(context: Context, resId: Int) {
+    fun play(context: Context, uriSound: String) {
         if (mediaPlayer?.isPlaying == true) return
         stop()
 
@@ -58,7 +58,10 @@ object AlarmPlayer {
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .build()
             )
-            setDataSource(context, Uri.parse("android.resource://${context.packageName}/$resId"))
+            setDataSource(
+                context,
+                uriSound.toUri()
+            )
             isLooping = true
             prepare()
             start()

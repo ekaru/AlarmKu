@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,6 +8,7 @@
     android:background="@color/bg_dark"
     android:padding="16dp">
 
+<!--  timepicker  -->
     <TextView
         android:id="@+id/timePicker"
         android:layout_width="wrap_content"
@@ -25,72 +27,163 @@
         android:layout_gravity="center_horizontal"
         android:text="Tap to change time"
         android:textColor="@color/text_secondary"
-        android:textSize="14sp"/>
+        android:textSize="14sp"
+        android:layout_marginBottom="16dp"/>
 
+<!--  soundpicker  -->
     <LinearLayout
+        android:id="@+id/layoutSound"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="16dp">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingVertical="16dp">
 
-        <CheckBox
-            android:id="@+id/cbMon"
-            android:text="Monday"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_primary"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <CheckBox
-            android:id="@+id/cbTue"
-            android:text="Tuesday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_primary"/>
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Sound"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"/>
 
-        <CheckBox
-            android:id="@+id/cbWed"
-            android:text="Wednesday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_primary"/>
+            <TextView
+                android:id="@+id/tvSoundValue"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Default"
+                android:textColor="@color/text_secondary"
+                android:textSize="16sp"/>
+        </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/cbThu"
-            android:text="Thursday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_primary"/>
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_chevron_right"
+            app:tint="@color/text_secondary"/>
 
-        <CheckBox
-            android:id="@+id/cbFri"
-            android:text="Friday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_primary"/>
-
-        <CheckBox
-            android:id="@+id/cbSat"
-            android:text="Saturday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_primary"/>
-
-        <CheckBox
-            android:id="@+id/cbSun"
-            android:text="Sunday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_primary"/>
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/etLabel"
+<!-- repeat -->
+    <LinearLayout
+        android:id="@+id/layoutRepeat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Alarm label"
-        android:layout_marginTop="16dp"
-        android:textColor="@color/text_primary"
-        android:textColorHint="@color/text_secondary"/>
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingVertical="16dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Repeat"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/tvRepeatValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Once"
+                android:textSize="16sp"
+                android:textColor="@color/text_secondary"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_chevron_right"
+            app:tint="@color/text_secondary"/>
+
+    </LinearLayout>
+
+<!--  delete once  -->
+    <LinearLayout
+        android:id="@+id/layoutDeleteOnce"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="16dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="Delete after goes off"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold"/>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchDeleteOnce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+<!--  label  -->
+    <LinearLayout
+        android:id="@+id/layoutLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingVertical="16dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Label"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvLabelValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Enter label"
+                android:textColor="@color/text_secondary"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_chevron_right"
+            app:tint="@color/text_secondary" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/card_dark" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSave"
