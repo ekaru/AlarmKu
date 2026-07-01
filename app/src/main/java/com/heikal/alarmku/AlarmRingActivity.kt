@@ -10,6 +10,12 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.heikal.alarmku.alarm.AlarmController
 import com.heikal.alarmku.alarm.AlarmPlayer
+import com.heikal.alarmku.data.local.AppDatabase
+import com.heikal.alarmku.data.repository.AlarmRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AlarmRingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,17 +36,33 @@ class AlarmRingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_alarm_ring)
 
         val alarmId = intent.getLongExtra("alarm_id", -1L)
-        val ringTime = findViewById<TextView>(R.id.tvRingTime)
-        val hour = intent.getIntExtra("alarm_hour", -1)
-        val minute = intent.getIntExtra("alarm_minute", -1)
-        val deleteOnce = intent.getBooleanExtra("alarm_deleteOnce", false)
-        val ringTimeText = "$hour:$minute"
-        ringTime.text = ringTimeText
 
+        val tvRingTime = findViewById<TextView>(R.id.tvRingTime)
         val tvLabel = findViewById<TextView>(R.id.tvAlarmLabel)
-        val label = intent.getStringExtra("alarm_label")
-        tvLabel.text = if (label.isNullOrEmpty()) "ALARM"
-            else label.uppercase()
+
+        CoroutineScope(Dispatchers.IO).launch {
+
+            val db = AppDatabase.getInstance(applicationContext)
+
+            val repository = AlarmRepository(db.alarmDao())
+
+            val alarm = repository.getAlarmById(alarmId)
+
+            alarm?.let {
+
+                withContext(Dispatchers.Main) {
+
+                    tvRingTime.text =
+                        String.format("%02d:%02d", it.hour, it.minute)
+
+                    tvLabel.text = if (it.label.isEmpty()) "ALARM"
+                    else it.label.uppercase()
+
+                }
+
+            }
+        }
+
 
         val btnStop = findViewById<Button>(R.id.btnStop)
         val btnSnooze = findViewById<Button>(R.id.btnSnooze)
@@ -48,7 +70,21 @@ class AlarmRingActivity : AppCompatActivity() {
             getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         btnStop.setOnClickListener {
-            AlarmController.stopAlarm(this, alarmId, deleteOnce)
+            CoroutineScope(Dispatchers.IO).launch {
+
+                val db = AppDatabase.getInstance(applicationContext)
+
+                val repository = AlarmRepository(db.alarmDao())
+
+                repository.getAlarmById(alarmId)?.let {
+
+                    AlarmController.stopAlarm(
+                        applicationContext,
+                        it
+                    )
+
+                }
+            }
             notificationManager.cancel(alarmId.toInt())
             finish()
         }

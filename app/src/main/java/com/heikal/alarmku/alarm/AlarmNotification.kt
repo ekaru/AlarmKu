@@ -25,7 +25,6 @@ object AlarmNotification {
         val stopIntent = Intent(context, AlarmActionReceiver::class.java).apply {
             action = "ACTION_STOP_ALARM"
             putExtra("alarm_id", alarmId)
-            putExtra("alarm_deleteOnce", deleteOnce)
         }
 
         val stopPendingIntent = PendingIntent.getBroadcast(

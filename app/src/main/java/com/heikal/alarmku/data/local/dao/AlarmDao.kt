@@ -29,4 +29,7 @@ interface AlarmDao {
     @Query("DELETE FROM alarms WHERE id IN (:ids)")
     suspend fun deleteByIds(ids: List<Long>)
 
+    @Query("UPDATE alarms SET isEnabled = :enabled WHERE id = :id")
+    suspend fun updateEnabled(enabled: Boolean, id: Long)
+
 }

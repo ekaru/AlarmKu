@@ -15,6 +15,7 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
 
         val alarmId = intent.getLongExtra("alarm_id", -1L)
+        val uri = "android.resource://${context.packageName}"
         if (alarmId == -1L) return
 
         receiverScope.launch {
@@ -23,15 +24,15 @@ class AlarmReceiver : BroadcastReceiver() {
             val alarmEntity = dao.getAlarmById(alarmId) ?: return@launch
 
             val soundsId = alarmEntity.soundIds
-                .split(",")
-                .mapNotNull { it.toIntOrNull() }
+                .split(",").map { it }
 
             if (soundsId.isEmpty()) return@launch
 
             val randomSoundId = soundsId.random()
             val soundResId = AlarmSoundProvider.getSoundResId(randomSoundId)
+            val finalUri = "$uri/$soundResId"
 
-            AlarmPlayer.play(context, soundResId)
+            AlarmPlayer.play(context, finalUri)
 
             AlarmNotification.show(
                 context = context,
